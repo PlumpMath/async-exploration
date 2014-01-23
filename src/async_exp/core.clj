@@ -2,8 +2,8 @@
     (:refer-clojure :exclude  [map reduce into partition partition-by take merge])
     (:require  [clojure.core.async :refer :all :as async]))
 
-(def c (chan))
 
+;;(clojure.core/take 5 (repeatedly #(range 20)))
 
 (defn isPrime?
   [x]
@@ -15,4 +15,12 @@
           (= (mod x div) 0) false
           (> div sqrt-of-x) true
           :else (recur (+ 2 div)))))))
+
+(def c (chan))
+
+(go
+    (dotimes [n 10]
+      (>! c n)))
+
+(<!! c)
 
