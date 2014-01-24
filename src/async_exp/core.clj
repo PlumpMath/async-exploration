@@ -39,6 +39,18 @@
       (let [v (<! ch)]
         (println "Read: " v)))))
 
+(defn getAnswers
+  "read and keep results from channel"
+  [ch max]
+  (loop [remaining max
+         results []]
+    (if (zero? remaining)
+      results
+      (let [v (<!! ch)]
+        (prn results)
+        (recur (dec remaining)
+               (conj results v))))))
+
 (defn processData
   ;;takes channel to process, returns channel with results
   [in-ch]
