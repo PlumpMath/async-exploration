@@ -16,11 +16,34 @@
           (> div sqrt-of-x) true
           :else (recur (+ 2 div)))))))
 
-(def c (chan))
+;; (def c (chan))
+;;
+;; (go
+;;     (dotimes [n 10]
+;;       (>! c n)))
+;;
+;; (<!! c)
 
-(go
-    (dotimes [n 10]
-      (>! c n)))
+(defn readwrite [] (let [ch (chan)]
+  (go (while true
+        (let [v (<! ch)]
+          (println "Read: " v))))
+  (go (>! ch "hi")
+      (>! ch "there"))))
 
-(<!! c)
+(defn readfrom
+  [ch]
+  (go
+    (while true
+      (let [v (<! ch)]
+        (println "Read: " v)))))
+
+
+(defn write
+  [seq-to-write]
+  (let [out (chan)]
+    (go
+      (doseq [i seq-to-write]
+        (>! out i)))
+    out))
 
