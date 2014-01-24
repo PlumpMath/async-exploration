@@ -17,6 +17,18 @@
           (> div sqrt-of-x) true
           :else (recur (+ 2 div)))))))
 
+
+(defn getPrimes
+  "take sequence s"
+  [s]
+  (loop [nums s
+         results []]
+    (if (not (seq nums))
+      results
+      (let [i (first nums)]
+        (recur (rest nums)
+             (conj results [i (isPrime? i)]))))))
+
 ;; (def c (chan))
 ;;
 ;; (go
