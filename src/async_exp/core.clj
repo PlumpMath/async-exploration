@@ -39,6 +39,8 @@
       (let [v (<! ch)]
         (println "Read: " v)))))
 
+(def chan-size 10)
+
 (defn getAnswers
   "read and keep results from channel"
   [ch max]
@@ -51,10 +53,11 @@
         (recur (dec remaining)
                (conj results v))))))
 
+
 (defn processData
   ;;takes channel to process, returns channel with results
   [in-ch]
-  (let [out-ch (chan)]
+  (let [out-ch (chan chan-size)]
     (go
       (while true
         (let [v (<! in-ch)]
@@ -63,7 +66,7 @@
 
 (defn write
   [seq-to-write]
-  (let [out (chan)]
+  (let [out (chan chan-size)]
     (go
       (doseq [i seq-to-write]
         (>! out i)))
