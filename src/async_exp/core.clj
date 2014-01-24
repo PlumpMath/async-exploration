@@ -6,6 +6,7 @@
 ;;(clojure.core/take 5 (repeatedly #(range 20)))
 
 (defn isPrime?
+  "Maybe have it catch 3"
   [x]
   (if  (= (mod x 2) 0)
     false
@@ -38,6 +39,15 @@
       (let [v (<! ch)]
         (println "Read: " v)))))
 
+(defn processData
+  ;;takes channel to process, returns channel with results
+  [in-ch]
+  (let [out-ch (chan)]
+    (go
+      (while true
+        (let [v (<! in-ch)]
+          (>! out-ch [v (isPrime? v)]))))
+    out-ch))
 
 (defn write
   [seq-to-write]
@@ -46,4 +56,4 @@
       (doseq [i seq-to-write]
         (>! out i)))
     out))
-
+;;(a/readfrom (a/processData (a/write [1 2 3 4 5 6])))
